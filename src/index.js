@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+// 여기 쓰인 App 이라는 글자와 render 안에 있는 <App /> 이라는 글자가 같아야 함
+// ./App 은 파일명! .js가 생략된 것
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
