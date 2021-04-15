@@ -52,6 +52,10 @@ class App extends Component {
                                 e.preventDefault();
 
                                 // this.state.mode = 'welcome'; // 틀린 문법!
+                                // 위와 같이 작성하면 값이 바뀌긴 한다.
+                                // 하지만 React 입장에서는 몰래 바뀐 값이다.
+                                // React가 이 값이 변경된지 모르기 때문에 render를 다시 호출하지 않는다.
+                                // 그렇기 때문에 화면에 나타나지 않는 것!
 
                                 // 이벤트 호출시 state를 변경하고 싶을 때 주의해야할 것
 
@@ -60,7 +64,7 @@ class App extends Component {
                                 //          component의 자기자신을 가르치지 않으므로 아무값도 세팅되어있지 않다.
 
                                 // 2. React에 맞는 문법을 사용해야 한다.
-                                this.setState({ mode: 'welcome' });
+                                this.setState({ mode: 'welcome' }); // 동적으로 값을 바꾸는 방법
                             }.bind(this)}
                         >
                             {this.state.subject.title}
