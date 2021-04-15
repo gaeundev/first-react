@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TOC from './components/TOC';
 import Content from './components/Content';
+import Counter from './components/Counter';
 // import Subject from './components/Subject';
 import './App.css';
 
@@ -68,6 +69,8 @@ class App extends Component {
                     {this.state.subject.sub}
                 </header>
                 <TOC data={this.state.contents}></TOC>
+                {/* Counter Component에서 .bind 없이 this를 사용할 수 있는 방법으로 구현해보았다. */}
+                <Counter />
                 <Content title={_title} desc={_desc}></Content>
             </div>
         );
