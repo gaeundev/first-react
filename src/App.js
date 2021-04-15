@@ -11,6 +11,7 @@ class App extends Component {
         super(props);
         this.state = {
             mode: 'welcome',
+            selected_content_id: 1,
             subject: { title: 'WEB', sub: 'World Wide Web!' },
             welcome: { title: 'Welcome', desc: 'Hello, React!!' },
             contents: [
@@ -31,8 +32,16 @@ class App extends Component {
             _title = this.state.welcome.title;
             _desc = this.state.welcome.desc;
         } else if (this.state.mode === 'read') {
-            _title = this.state.contents[0].title;
-            _desc = this.state.contents[0].desc;
+            let i = 0;
+            while (i < this.state.contents.length) {
+                let data = this.state.contents[i];
+                if (data.id === this.state.selected_content_id) {
+                    _title = data.title;
+                    _desc = data.desc;
+                    break;
+                }
+                i = i + 1;
+            }
         }
         return (
             <div className="App">
@@ -40,10 +49,18 @@ class App extends Component {
                     title={this.state.subject.title}
                     sub={this.state.subject.sub}
                     onChangePage={() => {
-                        this.setState({ mode: 'read' });
+                        this.setState({ mode: 'welcome' });
                     }}
                 ></Subject>
-                <TOC data={this.state.contents}></TOC>
+                <TOC
+                    onChangePage={(id) => {
+                        this.setState({
+                            mode: 'read',
+                            selected_content_id: Number(id),
+                        });
+                    }}
+                    data={this.state.contents}
+                ></TOC>
                 {/* Counter Component에서 .bind 없이 this를 사용할 수 있는 방법으로 구현해보았다. */}
                 <Counter />
                 <Content title={_title} desc={_desc}></Content>

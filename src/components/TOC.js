@@ -9,24 +9,38 @@ class TOC extends Component {
         while (i < data.length) {
             lists.push(
                 <li key={data[i].id}>
-                    <a href={'/content/' + data[i].id}>{data[i].title}</a>
+                    {/* 첫번째 방법. data- 라는 접두사로 시작하는 속성을 사용한다. */}
+                    {/* <a
+                        href={'/content/' + data[i].id}
+                        data-id={data[i].id}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            // e.target 은 e가 속한 태그를 찾아준다.
+                            // data- 접두사로 시작되는 속성은 이벤트.target.dataset으로 접근이 가능하다.
+                            // 즉 data-id={data[i].id} 로 id 값을 넣어주고, target.dataset으로 그 값을 가져와 사용하는 것
+                            this.props.onChangePage(e.target.dataset.id);
+                        }}
+                    > */}
+                    {/* 두번째 방법. bind의 인자값을 사용한다. */}
+                    <a
+                        href={'/content/' + data[i].id}
+                        onClick={function (id, e) {
+                            // 2. 즉 id = data[i].id 인 것...
+                            e.preventDefault();
+                            this.props.onChangePage(id);
+                        }.bind(this, data[i].id)} // 1. 여기서 쓰인 this 다음의 인자값들은 function의 첫번째 인자값으로 들어간다.
+                        // 3. 만약 .bind(this, data[i].id, data[i].content) 이런식으로 인자값이 늘어난다면
+                        // function (id, content, e) {} 이렇게 순서대로 나열하면 해당 인자값을 사용할 수 있다.
+                    >
+                        {data[i].title}
+                    </a>
                 </li>
             );
             i++;
         }
         return (
             <nav>
-                <ul>
-                    <li>
-                        <a href="1.html">HTML</a>
-                    </li>
-                    <li>
-                        <a href="2.css">CSS</a>
-                    </li>
-                    <li>
-                        <a href="3.javascript">JavaScript</a>
-                    </li>
-                </ul>
+                <ul>{lists}</ul>
             </nav>
         );
     }
