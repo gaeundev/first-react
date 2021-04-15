@@ -5,7 +5,17 @@ class Subject extends Component {
         return (
             <header>
                 <h1>
-                    <a href="/">{this.props.title}</a>
+                    <a
+                        href="/"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            // onClick 이벤트가 발생했을때,
+                            // props를 통해 전달된 직접만든 onChangePage 함수가 호출된다.
+                            this.props.onChangePage();
+                        }}
+                    >
+                        {this.props.title}
+                    </a>
                 </h1>
                 {this.props.sub}
             </header>
