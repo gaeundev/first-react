@@ -49,7 +49,18 @@ class App extends Component {
                                 // e가 포함된 태그의 기본적인 동작을 막는 함수.
                                 // 여기서는 href 가 동작하지 않게된다.
                                 e.preventDefault();
-                            }}
+
+                                // this.state.mode = 'welcome'; // 틀린 문법!
+
+                                // 이벤트 호출시 state를 변경하고 싶을 때 주의해야할 것
+
+                                // 1. this를 사용하기 위해서는 함수.bind(this)를 해주어야한다.
+                                // - 이유 : 이벤트 실행 안의 함수안에서는 this를 사용했을 때,
+                                //          component의 자기자신을 가르치지 않으므로 아무값도 세팅되어있지 않다.
+
+                                // 2. React에 맞는 문법을 사용해야 한다.
+                                this.setState({ mode: 'welcome' });
+                            }.bind(this)}
                         >
                             {this.state.subject.title}
                         </a>
