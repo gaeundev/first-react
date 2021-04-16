@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import TOC from './components/TOC';
-import Content from './components/Content';
-import Counter from './components/Counter';
+import ReadContent from './components/ReadContent';
+import CreateContent from './components/CreateContent';
 import Subject from './components/Subject';
+import Control from './components/Control';
 import './App.css';
 
 class App extends Component {
@@ -27,10 +28,12 @@ class App extends Component {
     }
     render() {
         let _title,
-            _desc = null;
+            _desc,
+            _article = null;
         if (this.state.mode === 'welcome') {
             _title = this.state.welcome.title;
             _desc = this.state.welcome.desc;
+            _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
         } else if (this.state.mode === 'read') {
             let i = 0;
             while (i < this.state.contents.length) {
@@ -42,6 +45,11 @@ class App extends Component {
                 }
                 i = i + 1;
             }
+            _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
+        } else if (this.state.mode === 'create') {
+            _article = (
+                <CreateContent title={_title} desc={_desc}></CreateContent>
+            );
         }
         return (
             <div className="App">
@@ -61,9 +69,14 @@ class App extends Component {
                     }}
                     data={this.state.contents}
                 ></TOC>
-                {/* Counter Component에서 .bind 없이 this를 사용할 수 있는 방법으로 구현해보았다. */}
-                <Counter />
-                <Content title={_title} desc={_desc}></Content>
+                <Control
+                    onChangeMode={function (_mode) {
+                        this.setState({
+                            mode: _mode,
+                        });
+                    }.bind(this)}
+                ></Control>
+                {_article}
             </div>
         );
     }
