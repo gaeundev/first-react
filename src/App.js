@@ -10,6 +10,7 @@ class App extends Component {
     // component 가 실행될 때 constructor가 제일 먼저 실행되면서 초기화를 담당한다.
     constructor(props) {
         super(props);
+        this.max_content_id = 3;
         this.state = {
             mode: 'welcome',
             selected_content_id: 1,
@@ -51,6 +52,30 @@ class App extends Component {
                 <CreateContent
                     onSubmit={function (_title, _desc) {
                         // add content to this.state.contents
+                        this.max_content_id = this.max_content_id + 1;
+                        /* [push 함수와 concat 함수의 차이]
+                        push 는 배열을 모두 바꾸면서 원소를 추가한다.
+                        let arr = [1, 2];
+                        arr.push(3);
+                        console.log(arr) -> [1, 2, 3];
+                        concat 은 배열을 바꾸지 않고, 원소를 추가한다.
+                        let arr2 = [1, 2];
+                        let result = arr2.concat(3);
+                        console.log(arr2) -> [1, 2];
+                        console.log(result) -> [1, 2, 3]; */
+                        // this.state.contents.push({
+                        //     id: this.max_content_id,
+                        //     title: _title,
+                        //     desc: _desc,
+                        // });
+                        let _contents = this.state.contents.concat({
+                            id: this.max_content_id,
+                            title: _title,
+                            desc: _desc,
+                        });
+                        this.setState({
+                            contents: _contents,
+                        });
                         console.log(_title, _desc);
                     }.bind(this)}
                 ></CreateContent>
