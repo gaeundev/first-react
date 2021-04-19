@@ -79,6 +79,8 @@ class App extends Component {
                         });
                         this.setState({
                             contents: newContents,
+                            mode: 'read',
+                            selected_content_id: this.max_content_id,
                         });
                         console.log(_title, _desc);
                     }.bind(this)}
@@ -89,23 +91,31 @@ class App extends Component {
             _article = (
                 <UpdateContent
                     data={_content}
-                    onSubmit={function (_title, _desc) {
-                        this.max_content_id = this.max_content_id + 1;
+                    onSubmit={function (_id, _title, _desc) {
                         // Array.from : 배열을 복제한다. ( 단, 복제한 배열과 복제된 배열은 다르다.)
                         // Object.assign : 객체를 복제한다. ( 단, 복제한 객체과 복제된 객체은 다르다.)
-                        let newContents = Array.from(this.state.contents);
+                        let _contents = Array.from(this.state.contents);
 
                         // 나중에 immutable-js 라는 라이브러리를 찾아보기!
                         // immutable-js 라는 라이브러리는 무조건 원본을 바꾸지 않고 새로 만들어 복제한다.
                         // 그렇기 때문에 위 라이브러리를 사용하면 코드의 일관성을 줄 수 있는 편리함이 있다.
 
-                        newContents.push({
-                            id: this.max_content_id,
-                            title: _title,
-                            desc: _desc,
-                        });
+                        let i = 0;
+                        while (i < _contents.length) {
+                            if (_contents[i].id === _id) {
+                                _contents[i] = {
+                                    id: _id,
+                                    title: _title,
+                                    desc: _desc,
+                                };
+                                break;
+                            }
+                            i = i + 1;
+                        }
+
                         this.setState({
-                            contents: newContents,
+                            contents: _contents,
+                            mode: 'read',
                         });
                         console.log(_title, _desc);
                     }.bind(this)}
