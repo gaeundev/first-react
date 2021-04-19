@@ -51,30 +51,22 @@ class App extends Component {
             _article = (
                 <CreateContent
                     onSubmit={function (_title, _desc) {
-                        // add content to this.state.contents
                         this.max_content_id = this.max_content_id + 1;
-                        /* [push 함수와 concat 함수의 차이]
-                        push 는 배열을 모두 바꾸면서 원소를 추가한다.
-                        let arr = [1, 2];
-                        arr.push(3);
-                        console.log(arr) -> [1, 2, 3];
-                        concat 은 배열을 바꾸지 않고, 원소를 추가한다.
-                        let arr2 = [1, 2];
-                        let result = arr2.concat(3);
-                        console.log(arr2) -> [1, 2];
-                        console.log(result) -> [1, 2, 3]; */
-                        // this.state.contents.push({
-                        //     id: this.max_content_id,
-                        //     title: _title,
-                        //     desc: _desc,
-                        // });
-                        let _contents = this.state.contents.concat({
+                        // Array.from : 배열을 복제한다. ( 단, 복제한 배열과 복제된 배열은 다르다.)
+                        // Object.assign : 객체를 복제한다. ( 단, 복제한 객체과 복제된 객체은 다르다.)
+                        let newContents = Array.from(this.state.contents);
+
+                        // 나중에 immutable-js 라는 라이브러리를 찾아보기!
+                        // immutable-js 라는 라이브러리는 무조건 원본을 바꾸지 않고 새로 만들어 복제한다.
+                        // 그렇기 때문에 위 라이브러리를 사용하면 코드의 일관성을 줄 수 있는 편리함이 있다.
+
+                        newContents.push({
                             id: this.max_content_id,
                             title: _title,
                             desc: _desc,
                         });
                         this.setState({
-                            contents: _contents,
+                            contents: newContents,
                         });
                         console.log(_title, _desc);
                     }.bind(this)}
