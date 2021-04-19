@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TOC from './components/TOC';
 import ReadContent from './components/ReadContent';
 import CreateContent from './components/CreateContent';
+import UpdateContent from './components/UpdateContent';
 import Subject from './components/Subject';
 import Control from './components/Control';
 import './App.css';
@@ -27,26 +28,37 @@ class App extends Component {
             ],
         };
     }
-    render() {
+
+    getReadContent() {
+        let i = 0;
+        while (i < this.state.contents.length) {
+            let data = this.state.contents[i];
+            if (data.id === this.state.selected_content_id) {
+                return data;
+            }
+            i = i + 1;
+        }
+    }
+
+    getContent() {
         let _title,
             _desc,
-            _article = null;
+            _article,
+            _content = null;
+
         if (this.state.mode === 'welcome') {
             _title = this.state.welcome.title;
             _desc = this.state.welcome.desc;
             _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
         } else if (this.state.mode === 'read') {
-            let i = 0;
-            while (i < this.state.contents.length) {
-                let data = this.state.contents[i];
-                if (data.id === this.state.selected_content_id) {
-                    _title = data.title;
-                    _desc = data.desc;
-                    break;
-                }
-                i = i + 1;
-            }
-            _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
+            _content = this.getReadContent();
+            console.log(_content);
+            _article = (
+                <ReadContent
+                    title={_content.title}
+                    desc={_content.desc}
+                ></ReadContent>
+            );
         } else if (this.state.mode === 'create') {
             _article = (
                 <CreateContent
@@ -72,7 +84,38 @@ class App extends Component {
                     }.bind(this)}
                 ></CreateContent>
             );
+        } else if (this.state.mode === 'update') {
+            _content = this.getReadContent();
+            _article = (
+                <UpdateContent
+                    data={_content}
+                    onSubmit={function (_title, _desc) {
+                        this.max_content_id = this.max_content_id + 1;
+                        // Array.from : 배열을 복제한다. ( 단, 복제한 배열과 복제된 배열은 다르다.)
+                        // Object.assign : 객체를 복제한다. ( 단, 복제한 객체과 복제된 객체은 다르다.)
+                        let newContents = Array.from(this.state.contents);
+
+                        // 나중에 immutable-js 라는 라이브러리를 찾아보기!
+                        // immutable-js 라는 라이브러리는 무조건 원본을 바꾸지 않고 새로 만들어 복제한다.
+                        // 그렇기 때문에 위 라이브러리를 사용하면 코드의 일관성을 줄 수 있는 편리함이 있다.
+
+                        newContents.push({
+                            id: this.max_content_id,
+                            title: _title,
+                            desc: _desc,
+                        });
+                        this.setState({
+                            contents: newContents,
+                        });
+                        console.log(_title, _desc);
+                    }.bind(this)}
+                ></UpdateContent>
+            );
         }
+        return _article;
+    }
+
+    render() {
         return (
             <div className="App">
                 <Subject
@@ -98,7 +141,7 @@ class App extends Component {
                         });
                     }.bind(this)}
                 ></Control>
-                {_article}
+                {this.getContent()}
             </div>
         );
     }
