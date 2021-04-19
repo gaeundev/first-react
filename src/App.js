@@ -146,9 +146,31 @@ class App extends Component {
                 ></TOC>
                 <Control
                     onChangeMode={function (_mode) {
+                        let _contents;
+                        if (_mode === 'delete') {
+                            if (window.confirm('really?')) {
+                                _contents = Array.from(this.state.contents);
+                                let i = 0;
+                                while (i < _contents.length) {
+                                    if (
+                                        _contents[i].id ===
+                                        this.state.selected_content_id
+                                    ) {
+                                        console.log(_contents);
+                                        _contents.splice(i, 1);
+                                        break;
+                                    }
+                                    i = i + 1;
+                                }
+                            } else {
+                                return;
+                            }
+                        }
                         this.setState({
-                            mode: _mode,
+                            contents: _contents,
+                            mode: 'welcome',
                         });
+                        alert('deleted');
                     }.bind(this)}
                 ></Control>
                 {this.getContent()}
