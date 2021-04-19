@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 
 class TOC extends Component {
+    // 라이프사이클 메서드
+    shouldComponentUpdate(newProps, newState) {
+        console.log(
+            '===> TOC render shouldComponentUpdate',
+            newProps.data, // 이후(새로운) 값
+            // 이전 값
+
+            // App.js에서 setState 를 할 때, concat을 사용하는 이유!
+            // push 를 하면 이 값도 newProps와 같아진다.
+            this.props.data
+        );
+        return newProps.data !== this.props.data;
+    }
     render() {
         let lists = [];
         let data = this.props.data;
